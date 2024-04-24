@@ -5,6 +5,8 @@ import cors from "cors";
 import admin from "firebase-admin";
 import serviceAccount from "./service-account.json" assert {type: "json"};
 
+const PROJECT_ID = 'smart-warehouse-manager';
+
 
 process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
