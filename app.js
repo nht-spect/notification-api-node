@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors  = require('cors');
 const { google } = require('googleapis');
@@ -8,6 +10,7 @@ const HOST = 'https://fcm.googleapis.com';
 const PATH = '/v1/projects/' + PROJECT_ID + '/messages:send';
 const MESSAGING_SCOPE = 'https://www.googleapis.com/auth/firebase.messaging';
 const SCOPES = [MESSAGING_SCOPE];
+
 
 
 const app = express();
@@ -78,6 +81,6 @@ app.post("/send", function (req, res) {
     });
 });
 
-app.listen( process.env.PORT || 3000, function () {
-    console.log("Server started on port 3000");
+app.listen(process.env.PORT, function () {
+    console.log(`Server started on port ${process.env.PORT}`);
 });
