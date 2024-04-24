@@ -1,17 +1,12 @@
-require('dotenv').config();
-
-const express = require('express');
-const cors  = require('cors');
-const { google } = require('googleapis');
-const request = require('request');
-
-const PROJECT_ID = 'smart-warehouse-manager';
-const HOST = 'https://fcm.googleapis.com';
-const PATH = '/v1/projects/' + PROJECT_ID + '/messages:send';
-const MESSAGING_SCOPE = 'https://www.googleapis.com/auth/firebase.messaging';
-const SCOPES = [MESSAGING_SCOPE];
+import {initializeApp} from 'firebase-admin/app';
+import {getMessaging} from "firebase-admin/messaging";
+import express from "express";
+import cors from "cors";
+import admin from "firebase-admin";
+import serviceAccount from "./service-account.json" assert {type: "json"};
 
 
+process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
 const app = express();
 app.use(express.json());
@@ -33,54 +28,47 @@ app.use(function(req, res, next) {
     next();
 });
 
-
-
-app.post("/send", function (req, res) {
-    const {body} = req;
-
-    function getAccessToken() {
-        return new Promise(function(resolve, reject) {
-            const key = require('./service-account.json');
-            const jwtClient = new google.auth.JWT(
-                key.client_email,
-                null,
-                key.private_key,
-                SCOPES,
-                null
-            );
-            jwtClient.authorize(function(err, tokens) {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                resolve(tokens.access_token);
-            });
-        });
-    }
-
-    getAccessToken().then(function(accessToken) {
-
-        const options = {
-            'method': 'POST',
-            'url': `${HOST}${PATH}`,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`
-            },
-            body: JSON.stringify(body),
-        }
-
-        request(options, function (error, response) {
-            if (error) {
-                res.status(500).send(JSON.stringify(error));
-                return;
-            };
-            res.status(200).send(response.body);
-        });
-
-    });
+initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    projectId: PROJECT_ID,
 });
 
-app.listen(process.env.PORT, function () {
-    console.log(`Server started on port ${process.env.PORT}`);
+app.post("/send/multiple", function (req, res) {
+    const body = req.body;
+    getMessaging()
+        .sendMulticast(body)
+        .then((response) => {
+            res.status(200).json({
+                message: "Successfully sent message"
+            });
+        })
+        .catch((error) => {
+            res.status(400);
+            res.send(error);
+        });
+
+
+});
+
+app.post("/send", function (req, res) {
+    const body = req.body;
+
+
+    getMessaging()
+        .send(body)
+        .then((response) => {
+            res.status(200).json({
+                message: "Successfully sent message"
+            });
+        })
+        .catch((error) => {
+            res.status(400);
+            res.send(error);
+        });
+
+
+});
+
+app.listen(process.env.PORT || 8000, function () {
+    console.log("Server started on port 3000");
 });
