@@ -1,6 +1,6 @@
-import express from "express";
-import cors from "cors";
-import notification from "./routes/notification.js";
+const express = require("express");
+const cors  =require("cors");
+const notification = require("./routes/notification");
 
 const app = express();
 app.use(express.json());

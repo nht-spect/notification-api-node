@@ -1,8 +1,8 @@
-import {initializeApp} from 'firebase-admin/app';
-import {getMessaging} from "firebase-admin/messaging";
-import express from "express";
-import admin from "firebase-admin";
-import serviceAccount from "../service-account.json" assert {type: "json"};
+const {initializeApp} = require('firebase-admin/app');
+const {getMessaging} = require("firebase-admin/messaging");
+const express = require("express");
+const admin =  require("firebase-admin");
+const serviceAccount = require("../service-account.json");
 
 const PROJECT_ID = 'smart-warehouse-manager';
 const router = express.Router();
@@ -52,4 +52,4 @@ router.post("/send", function (req, res) {
 
 });
 
-export default router;
+module.exports = router;
