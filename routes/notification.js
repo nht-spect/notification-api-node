@@ -15,6 +15,13 @@ initializeApp({
 });
 
 
+router.get("/", async (req, res, next) => {
+    return res.status(200).json({
+        title: "Express Testing",
+        message: "The app is working properly!",
+    });
+});
+
 
 router.post("/send/multiple", function (req, res) {
     const body = req.body;
