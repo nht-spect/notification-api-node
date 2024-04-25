@@ -2,24 +2,26 @@ const express = require("express");
 const cors  =require("cors");
 const notification = require("./routes/notification");
 
-const index = express();
-index.use(express.json());
+require("dotenv").config();
 
-index.use(
+const app = express();
+app.use(express.json());
+
+app.use(
     cors({
         origin: "*",
     })
 );
 
-index.use(
+app.use(
     cors({
         methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
     })
 );
 
-index.use("/notification", notification);
+app.use("/notification", notification);
 
 
-index.listen(process.env.PORT || 8000, function () {
+app.listen(process.env.PORT || 8000, function () {
     console.log(`Server started on port ${process.env.PORT|| 8000}`);
 });
