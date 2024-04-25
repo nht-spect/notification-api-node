@@ -37,6 +37,7 @@ initializeApp({
 
 app.post("/send/multiple", function (req, res) {
     const body = req.body;
+
     getMessaging()
         .sendMulticast(body)
         .then((response) => {
@@ -55,7 +56,6 @@ app.post("/send/multiple", function (req, res) {
 app.post("/send", function (req, res) {
     const body = req.body;
 
-
     getMessaging()
         .send(body)
         .then((response) => {
@@ -72,5 +72,5 @@ app.post("/send", function (req, res) {
 });
 
 app.listen(process.env.PORT || 8000, function () {
-    console.log("Server started on port 3000");
+    console.log(`Server started on port ${process.env.PORT|| 8000}`);
 });
