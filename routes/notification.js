@@ -7,8 +7,6 @@ const serviceAccount = require("../service-account.json");
 const PROJECT_ID = 'smart-warehouse-manager';
 const router = express.Router();
 
-process.env.GOOGLE_APPLICATION_CREDENTIALS;
-
 initializeApp({
     credential: admin.credential.cert(serviceAccount),
     projectId: PROJECT_ID,
